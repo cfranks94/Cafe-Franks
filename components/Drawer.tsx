@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { routes } from '../constants/app-routes';
 import { styled, useTheme, Theme, CSSObject } from "@mui/material/styles";
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { grey } from '@mui/material/colors';
@@ -23,6 +24,10 @@ import ListItemText from "@mui/material/ListItemText";
 import RestaurantIcon from '@mui/icons-material/Restaurant';
 import HomeIcon from '@mui/icons-material/Home';
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import EventIcon from '@mui/icons-material/Event';
+import FlightIcon from '@mui/icons-material/Flight';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Link from "@/node_modules/next/link";
 
 const darkTheme = createTheme({
   palette: {
@@ -112,7 +117,6 @@ const Drawer = styled(MuiDrawer, {
 
 export default function MiniDrawer({ children }: any) {
   const theme = useTheme();
-  const [width, setWidth] = useState(window.innerWidth);
   const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
@@ -123,38 +127,24 @@ export default function MiniDrawer({ children }: any) {
     setOpen(false);
   };
 
-  useEffect(() => {
-    function handleResize() {
-      setWidth(window.innerWidth);
-    }
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [width]);
-
-  useEffect(() => {
-    width < 760 && handleDrawerClose();
-  },[width]);
-
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
         <Box sx={{ display: "flex" }}>
         <AppBar position="fixed" open={open}>
           <Toolbar>
-            {width > 760 &&
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  marginRight: 5,
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-            }
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{
+                marginRight: 5,
+                ...(open && { display: "none" }),
+              }}
+            >
+              <MenuIcon />
+            </IconButton>
             
             <RestaurantIcon sx={{mr: 1}} />
             <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1 }}>
@@ -183,32 +173,64 @@ export default function MiniDrawer({ children }: any) {
           </DrawerHeader>
           <Divider />
           <List>
-            {["Home"].map((text, index) => (
-              <ListItem key={text} disablePadding sx={{ display: "block" }}>
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
+            {routes.map((route) => (
+              <Link key={route.text} href={route.path}>
+                <ListItem disablePadding sx={{ display: "block" }}>
+                  <ListItemButton
                     sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
                     }}
                   >
-                    <HomeIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                      }}
+                    >
+                      {route.text === "Home" &&
+                        <HomeIcon />
+                      }
+                      {route.text === "Food" &&
+                        <RestaurantIcon />
+                      }
+                      {route.text === "Events" &&
+                        <EventIcon />
+                      }
+                      {route.text === "Travel" &&
+                        <FlightIcon />
+                      }
+                    </ListItemIcon>
+                    <ListItemText primary={route.text} sx={{ opacity: open ? 1 : 0 }} />
+                  </ListItemButton>
+                </ListItem>
+              </Link>
             ))}
           </List>
           <Divider />
           <List>
-            
+            <ListItem disablePadding sx={{ display: "block" }}>
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <LogoutIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Logout'} sx={{ opacity: open ? 1 : 0 }} />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
