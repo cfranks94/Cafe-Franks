@@ -5,8 +5,8 @@ export const routes = [
         icon: ''
     },
     {
-        path: '/food',
-        text: 'Food',
+        path: '/dining',
+        text: 'Dining',
         icon: ''
     },
     {

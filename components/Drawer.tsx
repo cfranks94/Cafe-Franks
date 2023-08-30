@@ -177,6 +177,7 @@ export default function MiniDrawer({ children }: any) {
               <Link key={route.text} href={route.path}>
                 <ListItem disablePadding sx={{ display: "block" }}>
                   <ListItemButton
+                    selected={route.text === "Home"}
                     sx={{
                       minHeight: 48,
                       justifyContent: open ? "initial" : "center",
@@ -193,7 +194,7 @@ export default function MiniDrawer({ children }: any) {
                       {route.text === "Home" &&
                         <HomeIcon />
                       }
-                      {route.text === "Food" &&
+                      {route.text === "Dining" &&
                         <RestaurantIcon />
                       }
                       {route.text === "Events" &&
